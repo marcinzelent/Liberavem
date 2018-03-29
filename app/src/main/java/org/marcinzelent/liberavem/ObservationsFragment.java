@@ -6,11 +6,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.ListView;
 
 
 /**
@@ -80,7 +83,20 @@ public class ObservationsFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        FloatingActionButton fab = getView().findViewById(R.id.fab);
+        // Find the view pager that will allow the user to swipe between fragments
+        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
+
+        // Create an adapter that knows which fragment should be shown on each page
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getContext(), getChildFragmentManager());
+
+        // Set the adapter onto the view pager
+        viewPager.setAdapter(adapter);
+
+        // Give the TabLayout the ViewPager
+        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
+        FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
