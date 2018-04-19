@@ -88,4 +88,11 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="my_observations">My observations</string>
     <string name="all_observations">All observations</string>
+    <string name="created">Created:</string>
+    <string name="author">Author:</string>
+    <string name="population">Population:</string>
+    <string name="place">Place:</string>
+    <string name="latitude">Latitude:</string>
+    <string name="longitude">Longitude:</string>
+    <string name="comment">Comment:</string>
 </resources>

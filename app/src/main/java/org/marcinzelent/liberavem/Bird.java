@@ -1,37 +1,51 @@
 package org.marcinzelent.liberavem;
 
-public class Bird {
-    private int Id;
-    private long Created;
-    private String NameEnglish;
-    private String NameDanish;
-    private String PhotoUrl;
+import com.google.gson.annotations.SerializedName;
 
-    public Bird(int id, long created, String nameEnglish, String nameDanish, String photoUrl) {
-        Id = id;
-        Created = created;
-        NameEnglish = nameEnglish;
-        NameDanish = nameDanish;
-        PhotoUrl = photoUrl;
+import java.io.Serializable;
+
+public class Bird implements Serializable {
+    @SerializedName("Id")
+    private int id;
+    @SerializedName("Created")
+    private String created;
+    @SerializedName("NameEnglish")
+    private String nameEnglish;
+    @SerializedName("NameDanish")
+    private String nameDanish;
+    @SerializedName("PhotoUrl")
+    private String photoUrl;
+
+    public Bird(int id, String created, String nameEnglish, String nameDanish, String photoUrl) {
+        this.id = id;
+        this.created = created;
+        this.nameEnglish = nameEnglish;
+        this.nameDanish = nameDanish;
+        this.photoUrl = photoUrl;
     }
 
     public int getId() {
-        return Id;
+        return id;
     }
 
-    public long getCreated() {
-        return Created;
+    public String getCreated() {
+        return created;
     }
 
     public String getNameEnglish() {
-        return NameEnglish;
+        return nameEnglish;
     }
 
     public String getNameDanish() {
-        return NameDanish;
+        return nameDanish;
     }
 
     public String getPhotoUrl() {
-        return PhotoUrl;
+        return photoUrl;
+    }
+
+    @Override
+    public String toString() {
+        return getNameEnglish();
     }
 }
