@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 public class ObservationDetailsActivity extends AppCompatActivity {
 
     @Override
@@ -14,8 +16,10 @@ public class ObservationDetailsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Observation observation = (Observation) intent.getSerializableExtra("Observation");
-        //String photoUrl = (String) intent.getSerializableExtra("Photo");
+        String photoUrl = (String) intent.getSerializableExtra("Photo");
 
+        SquareImageView detailsPhoto = findViewById(R.id.details_photo);
+        Picasso.get().load(photoUrl).into(detailsPhoto);
         TextView detailsName = findViewById(R.id.details_name);
         detailsName.setText(observation.getNameEnglish());
         TextView detailsCreated = findViewById(R.id.details_created);

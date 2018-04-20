@@ -10,6 +10,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 
 public class ObservationsListAdapter extends BaseAdapter {
 
@@ -66,17 +68,13 @@ public class ObservationsListAdapter extends BaseAdapter {
         viewHolder.date.setText(observations[position].getCreated());
 
         String photoUrl = "";
-        //for (Bird bird : birds)
-        //    if (bird.getId() == observations[position].getBirdId())
-        //        photoUrl = bird.getPhotoUrl();
+        for (Bird bird : birds)
+            if (bird.getId() == observations[position].getBirdId())
+                photoUrl = bird.getPhotoUrl();
 
-        //viewHolder.photo.setImageResource(photoUrl);
+        Picasso.get().load(photoUrl).into(viewHolder.photo);
 
         return convertView;
-    }
-
-    public void add(int position, Observation observation, Bird bird) {
-
     }
 
     private static class ViewHolder {

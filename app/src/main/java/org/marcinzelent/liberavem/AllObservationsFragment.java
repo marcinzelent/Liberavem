@@ -58,20 +58,31 @@ public class AllObservationsFragment extends Fragment {
                 Intent detailsIntent = new Intent(getActivity(), ObservationDetailsActivity.class);
                 detailsIntent.putExtra("Observation", observations[position]);
 
-                //String photoUrl = "";
-                //for (Bird bird : birds)
-                //    if (bird.getId() == observations[position].getBirdId())
-                //        photoUrl = bird.getPhotoUrl();
-                //detailsIntent.putExtra("Photo", photoUrl);
+                String photoUrl = "";
+                for (Bird bird : birds)
+                    if (bird.getId() == observations[position].getBirdId())
+                        photoUrl = bird.getPhotoUrl();
+                detailsIntent.putExtra("Photo", photoUrl);
                 startActivity(detailsIntent);
             }
         });
 
-        //final ObservationsListAdapter adapter = new ObservationsListAdapter(getActivity(), observations, birds);
-        //observationsListView.setAdapter(adapter);
+        String birdsUrl = "http://birdobservationservice.azurewebsites.net/Service1.svc/birds";
+        final StringRequest birdsRequest = new StringRequest(Request.Method.GET, birdsUrl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Gson gson = new GsonBuilder().create();
+                birds = gson.fromJson(response, Bird[].class);
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getActivity(), "Couldn't connect to the database!", Toast.LENGTH_LONG).show();
+            }
+        });
 
         String observationsUrl = "http://birdobservationservice.azurewebsites.net/Service1.svc/observations";
-        final StringRequest observationRequest = new StringRequest(Request.Method.GET, observationsUrl, new Response.Listener<String>() {
+        final StringRequest observationsRequest = new StringRequest(Request.Method.GET, observationsUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Gson gson = new GsonBuilder().create();
@@ -89,10 +100,11 @@ public class AllObservationsFragment extends Fragment {
         }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getActivity(), "Database connection error :( ", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Couldn't connect to the database!", Toast.LENGTH_LONG).show();
             }
         });
 
-        Volley.newRequestQueue(getActivity()).add(observationRequest);
+        Volley.newRequestQueue(getActivity()).add(birdsRequest);
+        Volley.newRequestQueue(getActivity()).add(observationsRequest);
     }
 }
