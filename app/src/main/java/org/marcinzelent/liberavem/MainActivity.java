@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,6 +18,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -26,10 +29,14 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         ObservationsFragment.OnFragmentInteractionListener,
         AtlasFragment.OnFragmentInteractionListener {
+
+    Fragment observationsFragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,17 +46,16 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         if (savedInstanceState ==null) {
-            Fragment fragment = null;
             Class fragmentClass = null;
             fragmentClass = ObservationsFragment.class;
             try {
-                fragment = (Fragment) fragmentClass.newInstance();
+                observationsFragment = (Fragment) fragmentClass.newInstance();
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.flContent, observationsFragment).commit();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -131,5 +137,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    public List<Fragment> getAllFragments() {
+        return observationsFragment.getChildFragmentManager().getFragments();
     }
 }

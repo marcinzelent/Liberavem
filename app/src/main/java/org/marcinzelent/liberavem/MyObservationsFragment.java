@@ -20,8 +20,6 @@ import java.util.ArrayList;
  * A simple {@link Fragment} subclass.
  */
 public class MyObservationsFragment extends Fragment {
-    Observation[] observations;
-    Bird[] birds;
 
     public MyObservationsFragment() {
         // Required empty public constructor
@@ -35,14 +33,8 @@ public class MyObservationsFragment extends Fragment {
         return rootView;
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        String[] list = new String[] {
-                "String 1",
-                "String 2",
-                "String 3"
-        };
-        ListView observationsListView = view.findViewById(R.id.observations_list_view);
+    public void populateList(final Observation[] observations, final Bird[] birds) {
+        final ListView observationsListView = getView().findViewById(R.id.observations_list_view);
 
         observationsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -58,8 +50,7 @@ public class MyObservationsFragment extends Fragment {
                 startActivity(detailsIntent);
             }
         });
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, list);
+        final ObservationsListAdapter adapter = new ObservationsListAdapter(getActivity(), observations, birds);
         observationsListView.setAdapter(adapter);
     }
 }

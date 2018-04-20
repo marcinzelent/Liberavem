@@ -33,8 +33,6 @@ import java.util.TimeZone;
  * A simple {@link Fragment} subclass.
  */
 public class AllObservationsFragment extends Fragment {
-    Observation[] observations;
-    Bird[] birds;
 
     public AllObservationsFragment() {
         // Required empty public constructor
@@ -50,7 +48,11 @@ public class AllObservationsFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        final ListView observationsListView = view.findViewById(R.id.observations_list_view);
+        DataKeeper.getInstance().downloadData(getActivity());
+    }
+
+    public void populateList(final Observation[] observations, final Bird[] birds) {
+        final ListView observationsListView = getView().findViewById(R.id.observations_list_view);
 
         observationsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -66,45 +68,7 @@ public class AllObservationsFragment extends Fragment {
                 startActivity(detailsIntent);
             }
         });
-
-        String birdsUrl = "http://birdobservationservice.azurewebsites.net/Service1.svc/birds";
-        final StringRequest birdsRequest = new StringRequest(Request.Method.GET, birdsUrl, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Gson gson = new GsonBuilder().create();
-                birds = gson.fromJson(response, Bird[].class);
-            }
-        }, new com.android.volley.Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getActivity(), "Couldn't connect to the database!", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        String observationsUrl = "http://birdobservationservice.azurewebsites.net/Service1.svc/observations";
-        final StringRequest observationsRequest = new StringRequest(Request.Method.GET, observationsUrl, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Gson gson = new GsonBuilder().create();
-                observations = gson.fromJson(response, Observation[].class);
-                for (Observation o : observations) {
-                    int p = o.getCreated().indexOf('+');
-                    long epoch = Long.parseLong(o.getCreated().substring(6, p));
-                    Date date = new Date(epoch);
-                    String formatted = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.ENGLISH).format(date);
-                    o.setCreated(formatted);
-                }
-                final ObservationsListAdapter adapter = new ObservationsListAdapter(getActivity(), observations, birds);
-                observationsListView.setAdapter(adapter);
-            }
-        }, new com.android.volley.Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getActivity(), "Couldn't connect to the database!", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        Volley.newRequestQueue(getActivity()).add(birdsRequest);
-        Volley.newRequestQueue(getActivity()).add(observationsRequest);
+        final ObservationsListAdapter adapter = new ObservationsListAdapter(getActivity(), observations, birds);
+        observationsListView.setAdapter(adapter);
     }
 }
