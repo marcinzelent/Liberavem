@@ -26,7 +26,12 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
-        <activity android:name=".ObservationDetailsActivity"></activity>
+        <activity android:name=".ObservationDetailsActivity" />
+        <activity
+            android:name=".NewObservationActivity"
+            android:label="@string/title_activity_new_observation"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".BirdPickerActivity"></activity>
     </application>
 
 </manifest>

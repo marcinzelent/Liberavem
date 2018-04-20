@@ -95,4 +95,5 @@
     <string name="latitude">Latitude:</string>
     <string name="longitude">Longitude:</string>
     <string name="comment">Comment:</string>
+    <string name="title_activity_new_observation">NewObservationActivity</string>
 </resources>

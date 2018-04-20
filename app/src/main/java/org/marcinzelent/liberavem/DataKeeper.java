@@ -106,7 +106,7 @@ public class DataKeeper {
             MyObservationsFragment mo = (MyObservationsFragment) ((MainActivity)activity).getAllFragments().get(0);
             List<Observation> myObservationsList = new ArrayList<>();
             for (Observation o : observations)
-                if (o.getUserId().equals("Nancy")) myObservationsList.add(o);
+                if (o.getUserId().equals("Sminem")) myObservationsList.add(o);
 
             Observation[] myObservations = new Observation[myObservationsList.size()];
             myObservations = myObservationsList.toArray(myObservations);

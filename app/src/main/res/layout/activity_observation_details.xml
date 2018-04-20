@@ -84,7 +84,7 @@
                     android:id="@+id/details_user_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:ellipsize="none"
                     android:text="@string/author"
                     android:textStyle="bold" />
 
@@ -93,7 +93,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:ellipsize="end" />
             </LinearLayout>
 
             <LinearLayout
