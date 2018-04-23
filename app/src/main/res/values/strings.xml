@@ -85,15 +85,22 @@
     <string name="pref_title_vibrate">Vibrate</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="my_observations">My observations</string>
     <string name="all_observations">All observations</string>
-    <string name="created">Created:</string>
-    <string name="author">Author:</string>
-    <string name="population">Population:</string>
-    <string name="place">Place:</string>
-    <string name="latitude">Latitude:</string>
-    <string name="longitude">Longitude:</string>
-    <string name="comment">Comment:</string>
-    <string name="title_activity_new_observation">NewObservationActivity</string>
+    <string name="created2">Created:</string>
+    <string name="author2">Author:</string>
+    <string name="population2">Population:</string>
+    <string name="place2">Place:</string>
+    <string name="longitude2">Longitude:</string>
+    <string name="latitude2">Latitude:</string>
+    <string name="comment2">Comment:</string>
+    <string name="title_activity_new_observation">New observation</string>
+    <string name="population">Population</string>
+    <string name="place">Place</string>
+    <string name="longitude">Longitude</string>
+    <string name="latitude">Latitude</string>
+    <string name="comment">Comment</string>
+    <string name="cancel">Cancel</string>
+    <string name="add">Add</string>
+    <string name="observation_details">Observation details</string>
 </resources>

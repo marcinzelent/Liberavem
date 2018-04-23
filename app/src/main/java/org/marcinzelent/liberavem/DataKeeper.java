@@ -1,9 +1,6 @@
 package org.marcinzelent.liberavem;
 
 import android.app.Activity;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.view.View;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -103,7 +100,7 @@ public class DataKeeper {
 
     private void callPopulator(Activity activity) {
         if (birds != null && observations != null) {
-            MyObservationsFragment mo = (MyObservationsFragment) ((MainActivity)activity).getAllFragments().get(0);
+            MyObservationsFragment mo = (MyObservationsFragment) ((MainActivity)activity).getObservationFragments().get(0);
             List<Observation> myObservationsList = new ArrayList<>();
             for (Observation o : observations)
                 if (o.getUserId().equals("Sminem")) myObservationsList.add(o);
@@ -111,7 +108,7 @@ public class DataKeeper {
             Observation[] myObservations = new Observation[myObservationsList.size()];
             myObservations = myObservationsList.toArray(myObservations);
             mo.populateList(myObservations, birds);
-            AllObservationsFragment aof = (AllObservationsFragment) ((MainActivity)activity).getAllFragments().get(1);
+            AllObservationsFragment aof = (AllObservationsFragment) ((MainActivity)activity).getObservationFragments().get(1);
             aof.populateList(observations, birds);
         }
     }

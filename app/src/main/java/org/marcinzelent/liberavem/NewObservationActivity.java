@@ -1,14 +1,22 @@
 package org.marcinzelent.liberavem;
 
-import android.app.Activity;
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.provider.ContactsContract;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -25,40 +33,104 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Calendar;
 
 public class NewObservationActivity extends AppCompatActivity {
+
+    private Bird selectedBird;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_observation);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Button button = findViewById(R.id.button);
+        Button cancelButton = findViewById(R.id.new_cancel);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        Button button = findViewById(R.id.new_add);
         button.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View view) {
                 postNewObservation();
             }
         });
+
+        Spinner newBirdSpinner = findViewById(R.id.new_birds);
+        BirdsListAdapter adapter = new BirdsListAdapter(this, DataKeeper.getInstance().getBirds());
+        newBirdSpinner.setAdapter(adapter);
+        newBirdSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                selectedBird = DataKeeper.getInstance().getBirds()[i];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        // Acquire a reference to the system Location Manager
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+        // Define a listener that responds to location updates
+        LocationListener locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                // Called when a new location is found by the network location provider.
+                ((EditText)findViewById(R.id.new_longitude)).setText(String.valueOf(location.getLongitude()));
+                ((EditText)findViewById(R.id.new_latitude)).setText(String.valueOf(location.getLatitude()));
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+
+            public void onProviderEnabled(String provider) {
+            }
+
+            public void onProviderDisabled(String provider) {
+            }
+        };
+
+        // Register the listener with the Location Manager to receive location updates
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 
     public void postNewObservation() {
         try {
             JSONObject jsonBody = new JSONObject();
-            jsonBody.put("BirdId", "51");
-            jsonBody.put("Comment", "Værsgo, my friend");
-            jsonBody.put("Created", "/Date(1524182400000+0000)/");
-            jsonBody.put("Id", "162");
-            jsonBody.put("Latitude", "30.1187718");
-            jsonBody.put("Longitude", "51.381484");
-            jsonBody.put("Placename", "Black lodge");
-            jsonBody.put("Population", "5");
+            jsonBody.put("BirdId", selectedBird.getId());
+            jsonBody.put("Comment", ((EditText)findViewById(R.id.new_comment)).getText());
+            jsonBody.put("Created", "/Date(" + System.currentTimeMillis() + "+0000)/");
+            jsonBody.put("Id", "0");
+            jsonBody.put("Latitude", ((EditText)findViewById(R.id.new_latitude)).getText());
+            jsonBody.put("Longitude", ((EditText)findViewById(R.id.new_longitude)).getText());
+            jsonBody.put("Placename", ((EditText)findViewById(R.id.new_place)).getText());
+            jsonBody.put("Population", ((EditText)findViewById(R.id.new_population)).getText());
             jsonBody.put("UserId", "Sminem");
-            jsonBody.put("NameDanish", "gråkrage");
-            jsonBody.put("NameEnglish", "hooded crow");
+            jsonBody.put("NameDanish", selectedBird.getNameDanish());
+            jsonBody.put("NameEnglish", selectedBird.getNameEnglish());
             final String requestBody = jsonBody.toString();
 
             String url = "http://birdobservationservice.azurewebsites.net/Service1.svc/observations";
@@ -66,13 +138,15 @@ public class NewObservationActivity extends AppCompatActivity {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            Toast.makeText(getBaseContext(), "Couldn't add observation to the database!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getBaseContext(), "Successfully added activity to the database!", Toast.LENGTH_LONG).show();
+                            NewObservationActivity.this.finish();
+                            DataKeeper.getInstance().downloadData(NewObservationActivity.this);
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(getBaseContext(), "Successfully added activity to the database!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getBaseContext(), "Couldn't add observation to the database!", Toast.LENGTH_LONG).show();
                         }
                     }) {
 

@@ -4,6 +4,7 @@ package org.marcinzelent.liberavem;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,17 @@ public class AllObservationsFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        final SwipeRefreshLayout sfl = view.findViewById(R.id.swiperefresh);
+        sfl.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        DataKeeper.getInstance().downloadData(getActivity());
+                        sfl.setRefreshing(false);
+                    }
+                }
+        );
+
         DataKeeper.getInstance().downloadData(getActivity());
     }
 

@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -139,7 +140,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public List<Fragment> getAllFragments() {
+    public List<Fragment> getObservationFragments() {
         return observationsFragment.getChildFragmentManager().getFragments();
     }
 }
