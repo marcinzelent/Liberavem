@@ -139,8 +139,4 @@ public class MainActivity extends AppCompatActivity
     public void onFragmentInteraction(Uri uri) {
 
     }
-
-    public List<Fragment> getObservationFragments() {
-        return observationsFragment.getChildFragmentManager().getFragments();
-    }
 }

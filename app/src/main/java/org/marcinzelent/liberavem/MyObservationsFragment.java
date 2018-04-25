@@ -46,6 +46,8 @@ public class MyObservationsFragment extends Fragment {
                     }
                 }
         );
+
+        DataKeeper.getInstance().addFragment(this);
     }
 
     public void populateList(final Observation[] observations, final Bird[] birds) {

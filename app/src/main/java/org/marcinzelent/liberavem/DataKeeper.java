@@ -1,6 +1,7 @@
 package org.marcinzelent.liberavem;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -28,6 +29,7 @@ public class DataKeeper {
     private DataKeeper() {
     }
 
+    private List<Object> fragments = new ArrayList<Object>();
     private Bird[] birds;
     private Observation[] observations;
 
@@ -98,18 +100,29 @@ public class DataKeeper {
         Volley.newRequestQueue(activity).add(observationsRequest);
     }
 
+    public void addFragment(Object fragment) {
+        fragments.add(fragment);
+    }
+
+    public void clearFragments() {
+        fragments.clear();
+    }
+
     private void callPopulator(Activity activity) {
         if (birds != null && observations != null) {
-            MyObservationsFragment mo = (MyObservationsFragment) ((MainActivity)activity).getObservationFragments().get(0);
-            List<Observation> myObservationsList = new ArrayList<>();
-            for (Observation o : observations)
-                if (o.getUserId().equals("Sminem")) myObservationsList.add(o);
+            for(Object fragment : fragments) {
+                if (fragment.getClass() == AllObservationsFragment.class)
+                    ((AllObservationsFragment) fragment).populateList(observations, birds);
+                else {
+                    List<Observation> myObservationsList = new ArrayList<>();
+                    for (Observation o : observations)
+                        if (o.getUserId().equals("Sminem")) myObservationsList.add(o);
 
-            Observation[] myObservations = new Observation[myObservationsList.size()];
-            myObservations = myObservationsList.toArray(myObservations);
-            mo.populateList(myObservations, birds);
-            AllObservationsFragment aof = (AllObservationsFragment) ((MainActivity)activity).getObservationFragments().get(1);
-            aof.populateList(observations, birds);
+                    Observation[] myObservations = new Observation[myObservationsList.size()];
+                    myObservations = myObservationsList.toArray(myObservations);
+                    ((MyObservationsFragment) fragment).populateList(myObservations, birds);
+                }
+            }
         }
     }
 }
