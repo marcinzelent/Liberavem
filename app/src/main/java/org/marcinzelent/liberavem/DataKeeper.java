@@ -9,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -50,7 +51,7 @@ public class DataKeeper {
     }
 
     public void downloadData(final Activity activity) {
-        downloadBirds(activity);
+        if (birds == null) downloadBirds(activity);
         downloadObservations(activity);
     }
 
@@ -115,9 +116,10 @@ public class DataKeeper {
                     ((AllObservationsFragment) fragment).populateList(observations, birds);
                 else {
                     List<Observation> myObservationsList = new ArrayList<>();
-                    for (Observation o : observations)
-                        if (o.getUserId().equals("Sminem")) myObservationsList.add(o);
-
+                    for (Observation o : observations) {
+                        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        if (o.getUserId().equals(uid)) myObservationsList.add(o);
+                    }
                     Observation[] myObservations = new Observation[myObservationsList.size()];
                     myObservations = myObservationsList.toArray(myObservations);
                     ((MyObservationsFragment) fragment).populateList(myObservations, birds);

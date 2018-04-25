@@ -27,6 +27,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -37,7 +38,6 @@ public class MainActivity extends AppCompatActivity
         ObservationsFragment.OnFragmentInteractionListener,
         AtlasFragment.OnFragmentInteractionListener {
 
-    Fragment observationsFragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,16 +47,17 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         if (savedInstanceState ==null) {
+            Fragment fragment = null;
             Class fragmentClass = null;
             fragmentClass = ObservationsFragment.class;
             try {
-                observationsFragment = (Fragment) fragmentClass.newInstance();
+                fragment = (Fragment) fragmentClass.newInstance();
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.flContent, observationsFragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -119,6 +120,12 @@ public class MainActivity extends AppCompatActivity
             startActivity(settingsIntent);
         } else if (id == R.id.nav_about) {
 
+        } else if (id == R.id.nav_signout) {
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            auth.signOut();
+            finish();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
         }
         if (fragmentClass != null) {
             try {

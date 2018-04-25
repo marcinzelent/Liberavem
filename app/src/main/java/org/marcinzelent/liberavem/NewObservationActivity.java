@@ -28,6 +28,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -128,7 +129,7 @@ public class NewObservationActivity extends AppCompatActivity {
             jsonBody.put("Longitude", ((EditText)findViewById(R.id.new_longitude)).getText());
             jsonBody.put("Placename", ((EditText)findViewById(R.id.new_place)).getText());
             jsonBody.put("Population", ((EditText)findViewById(R.id.new_population)).getText());
-            jsonBody.put("UserId", "Sminem");
+            jsonBody.put("UserId", FirebaseAuth.getInstance().getCurrentUser().getUid());
             jsonBody.put("NameDanish", selectedBird.getNameDanish());
             jsonBody.put("NameEnglish", selectedBird.getNameEnglish());
             final String requestBody = jsonBody.toString();
