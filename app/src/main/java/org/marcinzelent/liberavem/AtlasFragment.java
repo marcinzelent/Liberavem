@@ -7,6 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
+
+import org.jetbrains.annotations.Nullable;
 
 
 /**
@@ -58,6 +61,8 @@ public class AtlasFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        ((MainActivity) getActivity()).setActionBarTitle("Atlas");
     }
 
     @Override
@@ -72,6 +77,12 @@ public class AtlasFragment extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        GridView atlasGrid = view.findViewById(R.id.atlas_grid);
+        atlasGrid.setAdapter(new AtlasGridAdapter(getActivity(), DataKeeper.getInstance().getBirds()));
     }
 
     @Override

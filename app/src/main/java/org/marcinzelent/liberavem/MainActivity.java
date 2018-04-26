@@ -36,7 +36,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         ObservationsFragment.OnFragmentInteractionListener,
-        AtlasFragment.OnFragmentInteractionListener {
+        AtlasFragment.OnFragmentInteractionListener,
+        AboutFragment.OnFragmentInteractionListener {
 
 
     @Override
@@ -96,9 +97,9 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_search) {
-            return true;
-        }
+        //if (id == R.id.action_search) {
+        //    return true;
+        //}
 
         return super.onOptionsItemSelected(item);
     }
@@ -119,7 +120,7 @@ public class MainActivity extends AppCompatActivity
             Intent settingsIntent = new Intent(this, SettingsActivity.class);
             startActivity(settingsIntent);
         } else if (id == R.id.nav_about) {
-
+            fragmentClass = AboutFragment.class;
         } else if (id == R.id.nav_signout) {
             FirebaseAuth auth = FirebaseAuth.getInstance();
             auth.signOut();
@@ -145,5 +146,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    public void setActionBarTitle(String title) {
+        getSupportActionBar().setTitle(title);
     }
 }

@@ -157,7 +157,7 @@ public class NewObservationActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public byte[] getBody() throws AuthFailureError {
+                public byte[] getBody() {
                     try {
                         return requestBody == null ? null : requestBody.getBytes("utf-8");
                     } catch (UnsupportedEncodingException uee) {
