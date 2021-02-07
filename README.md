@@ -4,8 +4,9 @@ A simple Android app for collecting bird observations. Made during Mobile Develo
 
 ## Preview
 
-| ![Preview](./screenshots/1.png) | ![Preview](./screenshots/2.png) | ![Preview](./screenshots/3.png) |
+| Login screen                    | Observations list               | Observation details             |
 | ------------------------------- | ------------------------------- | ------------------------------- |
+| ![Preview](./screenshots/1.png) | ![Preview](./screenshots/2.png) | ![Preview](./screenshots/3.png) |
 
 ## Description
 
